@@ -8,3 +8,5 @@ time table 에서 HH:MM:SS 형식을 추출하여 총합을 계산하는 계산�
 - [x] result area
 - [x] reset button
 - [x] css (mdbootstrap)
+
+https://funnystyle.github.io/ttt/
