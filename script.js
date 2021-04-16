@@ -4,13 +4,18 @@ const error = document.querySelector("#error");
 const reset = document.querySelector("#reset");
 const regex = /([0-9]+:)+[0-9]+/gim;
 
+function clear() {
+  [error, result].forEach((dom) => {
+    dom.classList.add("off");
+    dom.innerText = "";
+  });
+}
+
 function handleResetClick() {
-  error.classList.add("off");
-  result.classList.add("off");
-  result.innerText = "";
-  error.innerText = "";
+  clear();
   input.focus();
 }
+
 function printResult(text) {
   result.classList.remove("off");
   error.classList.add("off");
@@ -27,9 +32,28 @@ function lpad0(number) {
   return `${number}`.length === 1 ? `0${number}` : `${number}`;
 }
 
+function int(str) {
+  return parseInt(str, 10);
+}
+
+function sumSeconds(time) {
+  const splitted = time.split(":");
+  return splitted.reduce((prev, curr) => int(prev) * 60 + int(curr), 0);
+}
+
+function sumTotalSeconds(times) {
+  return times.reduce((prev, curr) => prev + sumSeconds(curr), 0);
+}
+
 function handleInputChange(e) {
   e.preventDefault();
   const text = e.target.value;
+
+  if (text === "") {
+    clear();
+    return;
+  }
+
   var found = text.match(regex);
 
   if (found === null) {
@@ -37,20 +61,11 @@ function handleInputChange(e) {
     return;
   }
 
-  const totalSeconds = found.reduce((sum, time) => {
-    const splited = time.split(":");
-    if (splited.length === 2) {
-      // M:S
-      sum += +splited[0] * 60 + +splited[1];
-    } else if (splited.length === 3) {
-      // H:M:S
-      sum += +splited[0] * 60 * 60 + +splited[1] * 60 + +splited[2];
-    }
-    return sum;
-  }, 0);
+  const totalSeconds = sumTotalSeconds(found);
 
   const MM = lpad0(Math.floor(totalSeconds / 60));
   const SS = lpad0(totalSeconds % 60);
+
   printResult(`Total ${MM}:${SS}`);
 }
 
