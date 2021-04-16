@@ -1,18 +1,26 @@
 const input = document.querySelector("#input");
 const result = document.querySelector("#result");
 const error = document.querySelector("#error");
+const reset = document.querySelector("#reset");
 const regex = /([0-9]+:)+[0-9]+/gim;
 
-function printResult(text) {
+function handleResetClick() {
   error.classList.add("off");
+  result.classList.add("off");
+  result.innerText = "";
+  error.innerText = "";
+  input.focus();
+}
+function printResult(text) {
   result.classList.remove("off");
+  error.classList.add("off");
   result.innerText = text;
 }
 
 function printError(text) {
-  error.classList.remove("off");
   result.classList.add("off");
-  result.innerText = text;
+  error.classList.remove("off");
+  error.innerText = text;
 }
 
 function lpad0(number) {
@@ -47,8 +55,8 @@ function handleInputChange(e) {
 }
 
 function init() {
-  console.log(input);
   input.addEventListener("input", handleInputChange);
+  reset.addEventListener("click", handleResetClick);
 }
 
 init();
